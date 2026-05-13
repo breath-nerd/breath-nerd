@@ -1,4 +1,4 @@
-# Project Brief: Breath Nerd
+# Project Brief: Breathe Nerd
 
 ## Problem
 
@@ -8,7 +8,7 @@ There is not a simple, low-friction tool designed for this exact moment inside a
 
 ## Solution
 
-Breath Nerd is a web application that guides users through a short structured breathing exercise. The app is designed to be quick and easy to use during a work session: open it, breathe, and return to work.
+Breathe Nerd is a web application that guides users through a short structured breathing exercise. The app is designed to be quick and easy to use during a work session: open it, breathe, and return to work.
 
 The MVP focuses on authentication, protected routes, one guided breathing exercise, and a database prepared for future breathing-session tracking.
 
@@ -16,7 +16,7 @@ In later stretch versions, users can rate their stress level before and after br
 
 ## MVP
 
-The MVP is the smallest version of Breath Nerd that proves the core value of the app. A user should be able to create an account, log in, access a protected breathing exercise, and complete one guided breathing flow.
+The MVP is the smallest version of Breathe Nerd that proves the core value of the app. A user should be able to create an account, log in, access a protected breathing exercise, and complete one guided breathing flow.
 
 The MVP includes:
 

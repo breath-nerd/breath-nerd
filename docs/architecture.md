@@ -1,6 +1,6 @@
 # Architecture
 
-This document describes the intended project scaffold and major boundaries for Breath Nerd.
+This document describes the intended project scaffold and major boundaries for Breathe Nerd.
 
 It is not a task list and it is not a final implementation plan. Students should use it as a shared map while still making implementation decisions in their own code.
 
@@ -32,7 +32,7 @@ The MVP does not require:
 The intended project shape is:
 
 ```text
-breath-nerd/
+breathe-nerd/
 |-- client/
 |   |-- src/
 |   |   |-- main.tsx

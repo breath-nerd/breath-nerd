@@ -1,16 +1,16 @@
-# Breath Nerd
+# Breathe Nerd
 
-Breath Nerd is a low-friction breathing exercise web app for developers and people who work at computers. The goal is simple: open the app, breathe for a short guided exercise, and get back to work.
+Breathe Nerd is a low-friction breathing exercise web app for developers and people who work at computers. The goal is simple: open the app, breathe for a short guided exercise, and get back to work.
 
 ## Problem
 
 Developers and computer-based workers often spend hours in high-stress, high-focus states without intentional recovery. When breaks do happen, they are often passive activities like scrolling or watching videos, which may not actually reset the nervous system.
 
-Most wellness apps are too generic, too complicated, or require too much commitment to use in the middle of a work session. Breath Nerd is designed for the specific moment when someone needs a short, structured reset without losing momentum.
+Most wellness apps are too generic, too complicated, or require too much commitment to use in the middle of a work session. Breathe Nerd is designed for the specific moment when someone needs a short, structured reset without losing momentum.
 
 ## Solution
 
-Breath Nerd guides users through a short breathing exercise designed to help reset their nervous system during a work session.
+Breathe Nerd guides users through a short breathing exercise designed to help reset their nervous system during a work session.
 
 The MVP focuses on authentication, protected routes, one guided breathing exercise, and a database prepared for future breathing-session tracking. Later stretch features can add mood check-ins, saved breathing-session history, and a personal dashboard.
 
@@ -92,7 +92,7 @@ duration
 ## Repo Layout
 
 ```text
-breath-nerd/
+breathe-nerd/
 |-- client/      # React + TypeScript frontend
 |-- server/      # Node + Express backend
 |-- docs/        # Planning docs and feature notes

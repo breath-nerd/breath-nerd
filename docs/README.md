@@ -1,6 +1,6 @@
 # Docs
 
-This directory contains durable supporting documents for Breath Nerd.
+This directory contains durable supporting documents for Breathe Nerd.
 
 Use these files for project structure, direction, boundaries, and shared decisions that should remain useful over time. Active task tracking belongs in `TODO.md`, contribution workflow belongs in `CONTRIBUTING.md`, and the main project overview belongs in the root `README.md`.
 
