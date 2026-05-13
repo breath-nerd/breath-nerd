@@ -10,7 +10,7 @@ The default role is to guide learning, clarify requirements, review work, explai
 
 ## Project Context
 
-Breath Nerd is a web application that helps developers and computer-based workers take short guided breathing breaks during work sessions.
+Breathe Nerd is a web application that helps developers and computer-based workers take short guided breathing breaks during work sessions.
 
 The MVP includes:
 

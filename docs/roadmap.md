@@ -1,12 +1,12 @@
 # Roadmap
 
-This roadmap describes the intended direction of Breath Nerd at a durable, project-level view. It is not the active task list.
+This roadmap describes the intended direction of Breathe Nerd at a durable, project-level view. It is not the active task list.
 
 Use `TODO.md` for current work items. Use this roadmap to understand what the project is building toward and what should wait until later.
 
 ## Guiding Principle
 
-Breath Nerd should stay low friction.
+Breathe Nerd should stay low friction.
 
 The app should help someone take a short breathing break in the middle of a work session without creating a large setup process, a complicated wellness program, or a distracting dashboard-first experience.
 
@@ -54,7 +54,7 @@ This stage is complete when:
 
 ## Stretch 2: Habit-Building Features
 
-Goal: make Breath Nerd more useful for repeated use.
+Goal: make Breathe Nerd more useful for repeated use.
 
 - Streak tracking.
 - Pomodoro integration.
@@ -80,7 +80,7 @@ Goal: give user more options to pick from.
 
 ## Long-Term Direction
 
-The long-term version of Breath Nerd can become a small recovery habit tool for developers and focused workers.
+The long-term version of Breathe Nerd can become a small recovery habit tool for developers and focused workers.
 
 The project should continue to prioritize:
 

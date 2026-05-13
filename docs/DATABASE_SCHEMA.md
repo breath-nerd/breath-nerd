@@ -1,6 +1,6 @@
 # Database Schema
 
-This document describes the durable database shape for Breath Nerd.
+This document describes the durable database shape for Breathe Nerd.
 
 The MVP needs authentication data and a database prepared for future breathing-session tracking, including future mood ratings and dashboard stats. The MVP does not require collecting mood ratings, saving completed breathing exercises, rendering dashboard stats, or showing breathing-session history yet.
 
