@@ -2,6 +2,7 @@ import type { Request, Response } from 'express'
 import express from 'express'
 import cors from 'cors'
 import dotenv from 'dotenv'
+import session from 'express-session'
 dotenv.config()
 
 const app = express()
@@ -15,6 +16,12 @@ const corsOptions = {
 
 app.use(cors(corsOptions))
 app.use(express.json())
+
+app.use(session({
+  secret: process.env.SESSION_SECRET!,
+  resave: false,
+  saveUninitialized: false
+}))
 
 app.get('/', (req:Request, res:Response) => {
   res.status(200).send('Test Route')
