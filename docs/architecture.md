@@ -43,7 +43,7 @@ breathe-nerd/
 |   |   `-- components/
 |   |       |-- LoginModal.tsx
 |   |       `-- BreathingPage.tsx
-|   `-- package.json
+|   `-- package.json 
 |-- server/
 |   |-- src/
 |   |   |-- server.ts
@@ -59,6 +59,7 @@ breathe-nerd/
 |-- docs/
 |-- .env
 |-- .gitignore
+|-- package.json
 |-- README.md
 `-- PROJECT_BRIEF.md
 ```
