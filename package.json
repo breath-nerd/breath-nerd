@@ -23,5 +23,8 @@
   "homepage": "https://github.com/breathe-nerd/breathe-nerd#readme",
   "dependencies": {
     "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "typescript": "^6.0.3"
   }
 }
