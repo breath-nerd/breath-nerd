@@ -39,6 +39,7 @@ export default function LoginModal({ onLoginSuccess }: LoginModalProps) {
 
             if(!response.ok) {
                 setError(data.error || "Something went wrong. please try again.");
+                return; 
             }
             onLoginSuccess(data.user);
         } catch (error) { 
@@ -60,7 +61,7 @@ export default function LoginModal({ onLoginSuccess }: LoginModalProps) {
                     let go of the props that no longer serve you
                 </p>
                 
-                <form className="auth-form">
+                <form className="auth-form" onSubmit={handleSubmit}>
                     {mode === "signup" && (
                         <label className="form-group">
                             Name
@@ -120,9 +121,3 @@ export default function LoginModal({ onLoginSuccess }: LoginModalProps) {
 
 
 
-//onLoginSuccess: (user: User) => void
-
-
-// interface LoginModalProps {
-//   onLoginSuccess: (user: User) => void;
-// }
