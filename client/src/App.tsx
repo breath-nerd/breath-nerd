@@ -6,7 +6,7 @@ import BreathingPage from "./components/BreathingPage";
 /*
   App.tsx Todo
   [x] 1. Imports — done!
-  [ ] 2. State: user (User | null), loading (boolean, starts true) — drop showLogin, derive it from user being null
+  [x] 2. State: user (User | null), loading (boolean, starts true) — drop showLogin, derive it from user being null
   [ ] 3. Auth check on load: useEffect calling GET /auth/verify, sets user or null, sets loading to false either way
   [ ] 4. Logout handler: calls POST /auth/logout, on success sets user to null
   [ ] 5. Render logic: loading → return null, no user → <LoginModal onLoginSuccess />, user → <BreathingPage user onLogout />
