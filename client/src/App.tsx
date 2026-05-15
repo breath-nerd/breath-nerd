@@ -7,8 +7,8 @@ import BreathingPage from "./components/BreathingPage";
   App.tsx Todo
   [x] 1. Imports — done!
   [x] 2. State: user (User | null), loading (boolean, starts true) — drop showLogin, derive it from user being null
-  [ ] 3. Auth check on load: useEffect calling GET /auth/verify, sets user or null, sets loading to false either way
-  [ ] 4. Logout handler: calls POST /auth/logout, on success sets user to null
+  [x] 3. Auth check on load: useEffect calling GET /auth/verify, sets user or null, sets loading to false either way
+  [x] 4. Logout handler: calls POST /auth/logout, on success sets user to null
   [ ] 5. Render logic: loading → return null, no user → <LoginModal onLoginSuccess />, user → <BreathingPage user onLogout />
 */
 
@@ -19,7 +19,10 @@ function App() {
   useEffect(() => {
     async function authCheck() {
       try {
-        const res = await fetch("/auth/verify", { credentials: "include" });
+        const res = await fetch("/auth/verify", {
+          method: "GET",
+          credentials: "include",
+        });
         if (res.ok) {
           const data = await res.json();
           setUser(data.user);
@@ -33,7 +36,30 @@ function App() {
     authCheck();
   }, []);
 
-  return <div></div>;
+  async function handleLogout() {
+    try {
+      const res = await fetch("/auth/logout", {
+        method: "POST",
+        credentials: "include",
+      });
+
+      if (!res.ok) {
+        throw new Error("Logout failed");
+      }
+
+      setUser(null);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  if (loading) return null;
+
+  if (!user) {
+    return <LoginModal onLoginSuccess={(user: User) => setUser(user)} />;
+  }
+
+  return <BreathingPage user={user} onLogout={handleLogout} />;
 }
 
 export default App;
