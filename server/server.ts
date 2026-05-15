@@ -5,7 +5,6 @@ import cors from 'cors'
 import session from 'express-session'
 import supabase from './db/supabaseClient.js'
 
-
 const app = express()
 const PORT = process.env.PORT || 3000
 
