@@ -16,6 +16,18 @@ export default function LoginModal({ onLoginSuccess }: LoginModalProps) {
     const [error, setError] = useState(""); 
     const [isLoading, setIsLoading] = useState(false); 
 
+    const resetForm = () => {
+        setName("");
+        setEmail("");
+        setPassword("");
+        setError("");
+    };
+
+    const switchMode = (nextMode: "login" | "signup") => {
+        setMode(nextMode);
+        resetForm();
+    };
+
     async function handleSubmit(event: SyntheticEvent<HTMLFormElement>) {
         event.preventDefault();
         setError("");
@@ -42,7 +54,8 @@ export default function LoginModal({ onLoginSuccess }: LoginModalProps) {
                 return; 
             }
             onLoginSuccess(data.user);
-        } catch (error) { 
+        } catch (err) { 
+            console.error("Login failed:", err); 
             setError("Unable to connect. Please try again.")
 
         } finally {
@@ -68,6 +81,7 @@ export default function LoginModal({ onLoginSuccess }: LoginModalProps) {
                             <input
                                 type="text"
                                 value={name}
+                                required
                                 onChange={(event) => setName(event.target.value)}
                             />
                         </label>
@@ -78,6 +92,7 @@ export default function LoginModal({ onLoginSuccess }: LoginModalProps) {
                         <input 
                             type="email" 
                             value={email}
+                            required
                             onChange={(event) => setEmail(event.target.value)}
                         />
                     </label>
@@ -87,6 +102,7 @@ export default function LoginModal({ onLoginSuccess }: LoginModalProps) {
                         <input
                             type="password"
                             value={password}
+                            required
                             onChange={(event) => setPassword(event.target.value)}
                         />
                     </label>
@@ -100,14 +116,14 @@ export default function LoginModal({ onLoginSuccess }: LoginModalProps) {
                 {mode === "login" ? (
                     <p className="auth-switch">
                         New here?{" "}
-                        <button type="button" onClick={() => setMode("signup")}>
+                        <button type="button" onClick={() => switchMode("signup")}>
                             Create an account
                         </button>
                     </p>
                 ):(
                     <p className="auth-switch">
                         Already have an account?{" "}
-                        <button type="button" onClick={() => setMode("login")}>
+                        <button type="button" onClick={() => switchMode("login")}>
                             Log in
                         </button>
                     </p>
