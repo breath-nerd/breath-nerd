@@ -4,22 +4,34 @@ import LoginModal from "./components/LoginModal";
 import BreathingPage from "./components/BreathingPage";
 
 /*
-  App.tsx Todo
-  [x] 1. Imports — done!
-  [x] 2. State: user (User | null), loading (boolean, starts true) — drop showLogin, derive it from user being null
-  [ ] 3. Auth check on load: useEffect calling GET /auth/verify, sets user or null, sets loading to false either way
-  [ ] 4. Logout handler: calls POST /auth/logout, on success sets user to null
-  [ ] 5. Render logic: loading → return null, no user → <LoginModal onLoginSuccess />, user → <BreathingPage user onLogout />
+  App.tsx
+
+  Root app component
+  
+  Responsibilities:
+  - Verify auth session on app load
+  - Store authenticated user state
+  - Render login flow vs authenticated app
+  - Handle logout
+
+  Flow:
+  App → passes auth callbacks to child components
+  Child → reports successful login back to App
 */
 
 function App() {
+  // global auth state
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
+  // Verify existing auth session on initial app load
   useEffect(() => {
     async function authCheck() {
       try {
-        const res = await fetch("/auth/verify", { credentials: "include" });
+        const res = await fetch("/auth/verify", {
+          method: "GET",
+          credentials: "include",
+        });
         if (res.ok) {
           const data = await res.json();
           setUser(data.user);
@@ -33,7 +45,37 @@ function App() {
     authCheck();
   }, []);
 
-  return <div></div>;
+  // clear authenticated user on logout
+  async function handleLogout() {
+    try {
+      const res = await fetch("/auth/logout", {
+        method: "POST",
+        credentials: "include",
+      });
+
+      if (!res.ok) {
+        throw new Error("Logout failed");
+      }
+
+      setUser(null);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  // prevent app render until auth check completes
+  if (loading) {
+    return <p>Loading classes...</p>;
+    //make separate loading page component and pass function into here and style it with css
+  }
+
+  //unauthenticated users are directed to LoginModal
+  if (!user) {
+    return <LoginModal onLoginSuccess={(user: User) => setUser(user)} />;
+  }
+
+  //authenticated users are directed to BreathingPage
+  return <BreathingPage user={user} onLogout={handleLogout} />;
 }
 
 export default App;
