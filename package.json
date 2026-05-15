@@ -7,11 +7,11 @@
     "doc": "docs"
   },
   "scripts": {
-    "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
-    "dev:server": "node --watch --import tsx/esm server/server.ts",
-    "dev:client": "vite client",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node --watch --import tsx/esm server/server.ts"
+  "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
+  "dev:server": "node --watch --import tsx/esm server/server.ts",
+  "dev:client": "npm run dev --prefix client",
+  "test": "echo \"Error: no test specified\" && exit 1",
+  "start": "node --watch --import tsx/esm server/server.ts"
   },
   "repository": {
     "type": "git",
