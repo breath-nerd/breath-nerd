@@ -69,13 +69,15 @@ function App() {
     //make separate loading page component and pass function into here and style it with css
   }
 
-  //unauthenticated users are directed to LoginModal
-  if (!user) {
-    return <LoginModal onLoginSuccess={(user: User) => setUser(user)} />;
-  }
+  //BreathingPAge is always visible
+  //LoginModal appears on top when user is logged out
+  return (
+    <>
+      <BreathingPage user={user} onLogout={handleLogout} isBlurred={!user} />
 
-  //authenticated users are directed to BreathingPage
-  return <BreathingPage user={user} onLogout={handleLogout} />;
+      {!user && <LoginModal onLoginSuccess={(user: User) => setUser(user)} />}
+    </>
+  );
 }
 
 export default App;
