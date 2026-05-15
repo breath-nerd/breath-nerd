@@ -1,8 +1,9 @@
 import { useState } from "react";
+import type { SyntheticEvent } from "react";
 import type { User } from "../types"; 
 
 type LoginModalProps = {
-    onLoginSuccess: (user: User) => void; 
+    onLoginSucccess: (user: User) => void; 
 };
 
 type AuthMode = "login" | "signup"; 
@@ -15,7 +16,38 @@ export default function LoginModal({ onLoginSucccess }: LoginModalProps) {
     const [error, setError] = useState(""); 
     const [isLoading, setIsLoading] = useState(false); 
 
-    async function 
+    async function handleSubmit(event: SyntheticEvent<HTMLFormElement>) {
+        event.preventDefault();
+        setError("");
+        setIsLoading(true);
+
+        const endpoint = mode === "login" ? "/auth/login" : "/auth/signup";
+
+        const requestBody = mode === "login" ? { email, password } : { name, email, password };
+
+        try{
+            const response  = await fetch (endpoint, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                credentials: "include", 
+                body: JSON.stringify(requestBody)
+            });
+
+            const data = await response.json()
+
+            if(!response.ok) {
+                setError(data.error || "Something went wrong. please try again.");
+            }
+            onLoginSucccess(data.user);
+        } catch (error) { 
+            setError("Unable to connect. Please try again.")
+
+        } finally {
+            setIsLoading(false);
+        }
+    }
 
     return (
         <div className= "modal-overlay">
