@@ -7,6 +7,18 @@ type BreathingPageProps = {
 };
 
 /*
+  Priority Tasks
+
+  [ ] Finish App.tsx auth/modal flow
+  [ ] Build blurred landing page layout
+  [ ] Build LoginModal overlay behavior
+  [ ] Add start button
+  [ ] Add placeholder breathing screen
+  [ ] Add logout button
+  [ ] Test frontend ↔ backend auth flow
+*/
+
+/*
   BreathingPage MVP Todo
 
   [ ] 1. Update props:
