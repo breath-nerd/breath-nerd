@@ -91,6 +91,34 @@ breathing_sessions
 - created_at
 ```
 
+## SQL
+
+### users table
+```sql
+CREATE TABLE users (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  email TEXT NOT NULL,
+  password_hash TEXT NOT NULL,
+  name TEXT NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT now()
+);
+
+ALTER TABLE users ADD CONSTRAINT users_email_unique UNIQUE (email);
+```
+
+### breathing_sessions table
+```sql
+CREATE TABLE breathing_sessions (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES users(id),
+  mood_before INT NOT NULL,
+  mood_after INT NOT NULL,
+  duration_seconds INT NOT NULL,
+  completed BOOLEAN NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT now()
+);
+```
+
 ## Auth Sessions vs. Breathing Sessions
 
 These are different concepts.

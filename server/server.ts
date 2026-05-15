@@ -1,8 +1,10 @@
+import 'dotenv/config'
 import type { Request, Response } from 'express'
 import express from 'express'
 import cors from 'cors'
-import dotenv from 'dotenv'
-dotenv.config()
+import session from 'express-session'
+import supabase from './db/supabaseClient.js'
+
 
 const app = express()
 const PORT = process.env.PORT || 3000
@@ -16,9 +18,11 @@ const corsOptions = {
 app.use(cors(corsOptions))
 app.use(express.json())
 
-app.get('/', (req:Request, res:Response) => {
-  res.status(200).send('Test Route')
-})
+app.use(session({
+  secret: process.env.SESSION_SECRET!,
+  resave: false,
+  saveUninitialized: false
+}))
 
 app.listen(PORT, () => {
   console.log(`Server listening at http://localhost:${PORT}`)
