@@ -3,12 +3,12 @@ import type { SyntheticEvent } from "react";
 import type { User } from "../types"; 
 
 type LoginModalProps = {
-    onLoginSucccess: (user: User) => void; 
+    onLoginSuccess: (user: User) => void; 
 };
 
 type AuthMode = "login" | "signup"; 
 
-export default function LoginModal({ onLoginSucccess }: LoginModalProps) {
+export default function LoginModal({ onLoginSuccess }: LoginModalProps) {
     const [mode, setMode] = useState<AuthMode>("login");
     const [name, setName] = useState(""); 
     const [email, setEmail] = useState("");
@@ -40,7 +40,7 @@ export default function LoginModal({ onLoginSucccess }: LoginModalProps) {
             if(!response.ok) {
                 setError(data.error || "Something went wrong. please try again.");
             }
-            onLoginSucccess(data.user);
+            onLoginSuccess(data.user);
         } catch (error) { 
             setError("Unable to connect. Please try again.")
 
