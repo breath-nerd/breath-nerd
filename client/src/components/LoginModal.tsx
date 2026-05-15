@@ -15,6 +15,8 @@ export default function LoginModal({ onLoginSucccess }: LoginModalProps) {
     const [error, setError] = useState(""); 
     const [isLoading, setIsLoading] = useState(false); 
 
+    async function 
+
     return (
         <div className= "modal-overlay">
             <section className="login-modal">
