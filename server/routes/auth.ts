@@ -41,9 +41,11 @@ router.get("/verify", isAuthenticated, async (req, res) => {
 
     //  request of a status check with catch error used
     return res.status(200).json({
-      id: user.id,
-      email: user.email,
-      name: user.name,
+      user: {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+      },
     });
     //  This catch block handles unexpected runtime errors (e.g., database failure, undefined values, or server issues).
     // It returns a 500 Internal Server Error to indicate the problem is on the server side, not the client.
