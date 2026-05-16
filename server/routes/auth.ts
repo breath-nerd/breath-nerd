@@ -12,6 +12,7 @@ VERIFY ROUTE (GET /auth/verify)
 
 //  Initiating Authentication - starting all the required imports. 
 import express from "express";
+import bcrypt from "bcrypt";    
 import { isAuthenticated } from "../middleware/isAuthenticated";
 import { supabase } from "../db/supabase";
 
@@ -39,7 +40,7 @@ router.get("/verify", isAuthenticated, async (req, res) => {
       });
     }
 
-    //  request of a status check with catch error used
+    //  request of a statsus check with catch error used
     return res.status(200).json({
       id: user.id,
       email: user.email,
@@ -93,4 +94,117 @@ router.post("/logout", (req, res) => {
   }
 });
 
+/* pseudo code 
+Route: Post /auth/ signup  
+use of try - extracl email, password, name from request body 
+1. validate input - if any feild is missing, return an error bad message 
+2. check if exist in the database, if it does, querry user's email = provided 
+   -- if db erro, return 500 (server erro)
+   -- if user exist, return 409 - return user already exist 
+ 3. use of hash password - call the bycrpt - create db, insert email, password, name into users table
+ 4. Start session then return a response  
+ 
+*/ 
+router. post ("/signup", (req, res) => { 
+    try { 
+    const {email, password, name } = req.body;     
+    if(!email || !password || !name) { 
+        return res.status(400).json ({
+            error :"User must provide correct name, email and password "
+        }); 
+     }
+     const {data:existingUSer, error:existingUSerError} = await supabase; 
+     .from ("user"); 
+     .select("id")
+     .eq("email", email)
+     .maybeSingle()
+if (existingUSerError) { 
+    return res.status (500).json ({ 
+        error :"This is a server error, checking existing user",
+ });
+}
+const hashedPassword = await bcrypt.hash(password, 10);
+
+    const { data: newUser, error: insertError } = await supabase
+      .from("users")
+      .insert({
+        email,
+        password: hashedPassword,  
+        name,
+      })
+      .select("id, email, name")
+      .single();
+
+    if (insertError || !newUser) {
+      return res.status(500).json({
+        error: "this is a server error due to creating a user error",
+      });
+    }
+    req.session.userId = newUser.id;
+
+    return res.status(201).json({
+      user: {
+        id: newUser.id,
+        email: newUser.email,
+        name: newUser.name,
+      },
+    });
+  } catch (err) {
+    return res.status(500).json({
+      error: "Server error",
+    });
+  }
+});
+/*pseudo code
+1. Get email and password from request
+2. Find user by email → if not found return 401
+3. Compare password with stored hash → if mismatch return 401
+4. Save userId to session and return 200 with user
+ */
+router.post ("loging" ,(req,res) => { 
+    try { 
+        const {email,password}= req.body; 
+        
+        if (!email || !password) {
+      return res.status(400).json({
+        error: "Email and password are required",
+      });
+    }
+
+    const { data: user, error } = await supabase
+      .from("users")
+      .select("id, email, name, password")
+      .eq("email", email)
+      .single();
+
+    if (error || !user) {
+      return res.status(401).json({
+        error: "Invalid email or password",
+      });
+    }
+    const passwordMatches = await bcrypt.compare(password, user.password);
+
+    if (!passwordMatches) {
+      return res.status(401).json({
+        error: "Invalid email or password",
+      });
+    }
+
+    req.session.userId = user.id;
+
+    return res.status(200).json({
+      user: {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+      },
+    });
+  } catch (err) {
+    return res.status(500).json({
+      error: "Server error",
+    });
+
+    }
+})
+    
 export default router;
