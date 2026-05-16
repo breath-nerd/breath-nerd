@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import type { User } from "../types";
 
 type BreathingPageProps = {
@@ -57,7 +58,22 @@ type BreathingPageProps = {
 */
 
 function BreathingPage() {
-  return <div></div>;
+  const [breathe, setBreathe] = useState(false);
+  const [phase, setPhase] = useState("notStarted");
+  return (
+    <div>
+      {breathe === false ? (
+        <div>
+          <h1>Breathe, Nerd</h1>
+          <button onClick={() => setBreathe(true)}>Start</button>
+        </div>
+      ) : (
+        <div>
+          <h1>INHALE</h1>
+        </div>
+      )}
+    </div>
+  );
 }
 
 export default BreathingPage;
