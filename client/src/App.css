@@ -1,0 +1,50 @@
+.breathing-page {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.breathing-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 28px;
+    text-align: center;
+}
+
+.breathing-content button {
+    font: inherit;
+    font-size: 1.35rem;
+    font-weight: 700;
+    padding: 14px 28px;
+    border: none;
+    border-radius: 999px;
+    background: #fdfaf3;
+    color: #404040;
+    cursor: pointer;
+}
+
+.breathing-content h1 {
+    margin: 0;
+    font-size: 3rem;
+    line-height: 1;
+}
+
+.breathing-circle {
+    width: 320px;
+    height: 320px;
+    border-radius: 50%;
+    background: #E8D588;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.breathing-count {
+    font-size: 5rem;
+    font-weight: 700;
+    line-height: 1;
+    color: #fdfaf3;
+}
