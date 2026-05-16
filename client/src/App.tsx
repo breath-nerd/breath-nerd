@@ -4,10 +4,6 @@ import type { User } from "./types";
 import BreathingPage from "./components/BreathingPage";
 
 /*
-  App.tsx
-
-  Root app component
-  
   Responsibilities:
   - Verify auth session on app load
   - Store authenticated user state
@@ -20,16 +16,15 @@ import BreathingPage from "./components/BreathingPage";
 */
 
 function App() {
-  // global auth state
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // Verify existing auth session on initial app load
   useEffect(() => {
     async function authCheck() {
       try {
         const res = await fetch("/auth/verify", {
           method: "GET",
+          // credentials required so session cookie is sent with the request
           credentials: "include",
         });
         if (res.ok) {
@@ -45,7 +40,6 @@ function App() {
     authCheck();
   }, []);
 
-  // clear authenticated user on logout
   async function handleLogout() {
     try {
       const res = await fetch("/auth/logout", {
@@ -56,7 +50,7 @@ function App() {
       if (!res.ok) {
         throw new Error("Logout failed");
       }
-
+      // clear user state client-side after server session is destroyed
       setUser(null);
     } catch (error) {
       console.error(error);

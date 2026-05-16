@@ -1,9 +1,9 @@
 import 'dotenv/config'
-import type { Request, Response } from 'express'
+import type { Request, Response, NextFunction } from 'express'
 import express from 'express'
 import cors from 'cors'
 import session from 'express-session'
-import supabase from './db/supabaseClient.js'
+import authRouter from './routes/auth.js'
 
 const app = express()
 const PORT = process.env.PORT || 3000
@@ -22,6 +22,14 @@ app.use(session({
   resave: false,
   saveUninitialized: false
 }))
+
+app.use('/auth', authRouter)
+
+app.use((err:Error, _req:Request, res:Response, _next:NextFunction) => {
+  console.error(err.stack)
+
+  res.status(500).json({ error : "Internal Server Error" })
+})
 
 app.listen(PORT, () => {
   console.log(`Server listening at http://localhost:${PORT}`)
