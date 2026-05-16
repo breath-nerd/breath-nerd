@@ -1,4 +1,3 @@
-
 /*  ← starts comment
 VERIFY ROUTE (GET /auth/verify)
 --------------------------------
@@ -12,9 +11,10 @@ VERIFY ROUTE (GET /auth/verify)
 
 //  Initiating Authentication - starting all the required imports. 
 import express from "express";
+import type { Request, Response, NextFunction } from "express";
 import bcrypt from "bcrypt";    
 import { isAuthenticated } from "../middleware/isAuthenticated";
-import { supabase } from "../db/supabase";
+import { supabase } from "../db/supabaseClient";
 
 // all imports are listed above are subject to added to. 
 
@@ -24,7 +24,7 @@ import { supabase } from "../db/supabase";
 
 const router = express.Router();
 
-router.get("/verify", isAuthenticated, async (req, res) => {
+router.get("/verify", isAuthenticated, async (req: Request, res: Response, next: NextFunction) => {
   try {
     const userId = req.session.userId;
 
@@ -51,9 +51,7 @@ router.get("/verify", isAuthenticated, async (req, res) => {
     // The actual error is not exposed to the client for security reasons.
 
   } catch (err) {
-    return res.status(500).json({
-      message: "Server error",
-    });
+    next(err);
   }
 });
 
@@ -69,14 +67,11 @@ LOGOUT ROUTE (POST /auth/logout)
 ============
 */ 
 
-router.post("/logout", (req, res) => {
+router.post("/logout", (req: Request, res: Response, next: NextFunction) => {
   try {
     req.session.destroy((err) => {
       if (err) {
-        return res.status(500).json({
-          // this message appears only if callback receive an error. For studying purpose Express tried to destroy the session, but the session store had a problem. 
-          message: "Failed to log out",
-        });
+        return next(err);
       }
 
       // clear cookie (name usually "connect.sid")
@@ -88,9 +83,7 @@ router.post("/logout", (req, res) => {
     });
     // catch err added 
   } catch (err) {
-    return res.status(500).json({
-      message: "Server error",
-    });
+    next(err);
   }
 });
 
@@ -105,25 +98,33 @@ use of try - extracl email, password, name from request body
  4. Start session then return a response  
  
 */ 
-router. post ("/signup", (req, res) => { 
-    try { 
-    const {email, password, name } = req.body;     
-    if(!email || !password || !name) { 
-        return res.status(400).json ({
-            error :"User must provide correct name, email and password "
-        }); 
-     }
-     const {data:existingUSer, error:existingUSerError} = await supabase; 
-     .from ("user"); 
-     .select("id")
-     .eq("email", email)
-     .maybeSingle()
-if (existingUSerError) { 
-    return res.status (500).json ({ 
-        error :"This is a server error, checking existing user",
- });
-}
-const hashedPassword = await bcrypt.hash(password, 10);
+router.post("/signup", async (req: Request, res: Response, next: NextFunction) => { 
+  try { 
+    const { email, password, name } = req.body;     
+
+    if (!email || !password || !name) { 
+      return res.status(400).json({
+        error: "User must provide correct name, email and password",
+      }); 
+    }
+
+    const { data: existingUser, error: existingUserError } = await supabase
+      .from("users")
+      .select("id")
+      .eq("email", email)
+      .maybeSingle();
+
+    if (existingUserError) { 
+      return next(existingUserError);
+    }
+
+    if (existingUser) {
+      return res.status(409).json({
+        error: "An account with that email already exists",
+      });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     const { data: newUser, error: insertError } = await supabase
       .from("users")
@@ -136,10 +137,9 @@ const hashedPassword = await bcrypt.hash(password, 10);
       .single();
 
     if (insertError || !newUser) {
-      return res.status(500).json({
-        error: "this is a server error due to creating a user error",
-      });
+      return next(insertError);
     }
+
     req.session.userId = newUser.id;
 
     return res.status(201).json({
@@ -150,22 +150,21 @@ const hashedPassword = await bcrypt.hash(password, 10);
       },
     });
   } catch (err) {
-    return res.status(500).json({
-      error: "Server error",
-    });
+    next(err);
   }
 });
+
 /*pseudo code
 1. Get email and password from request
 2. Find user by email → if not found return 401
 3. Compare password with stored hash → if mismatch return 401
 4. Save userId to session and return 200 with user
  */
-router.post ("loging" ,(req,res) => { 
-    try { 
-        const {email,password}= req.body; 
+router.post("/login", async (req: Request, res: Response, next: NextFunction) => { 
+  try { 
+    const { email, password } = req.body; 
         
-        if (!email || !password) {
+    if (!email || !password) {
       return res.status(400).json({
         error: "Email and password are required",
       });
@@ -182,6 +181,7 @@ router.post ("loging" ,(req,res) => {
         error: "Invalid email or password",
       });
     }
+
     const passwordMatches = await bcrypt.compare(password, user.password);
 
     if (!passwordMatches) {
@@ -200,11 +200,8 @@ router.post ("loging" ,(req,res) => {
       },
     });
   } catch (err) {
-    return res.status(500).json({
-      error: "Server error",
-    });
-
-    }
-})
+    next(err);
+  }
+});
     
 export default router;
