@@ -95,9 +95,11 @@ type BreathingPageProps = {
 function BreathingPage({ user, onLogout, isBlurred }) {
   const [breathe, setBreathe] = useState(false);
   const [phase, setPhase] = useState("notStarted");
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState(4);
+  const [timeRemaining, setTimeRemaining] = useState(140);
 
   function goToInhale() {
+    setBreathe(true);
     setPhase("inhale");
     setCount(4);
   }
@@ -107,32 +109,83 @@ function BreathingPage({ user, onLogout, isBlurred }) {
     setCount(2);
   }
 
-  function gotToExhale() {
+  function goToExhale() {
     setPhase("exhale");
     setCount(6);
+  }
 
-    function toToPauseAfterExhale() {
-      setPhase("pauseAfterExhale");
-      setCount(2);
-    }
+  function goToPauseAfterExhale() {
+    setPhase("pauseAfterExhale");
+    setCount(2);
   }
 
   function handleStart() {
     goToInhale();
   }
 
+  function getPhaseDisplayText() {
+    if (!breathe) {
+      return "Breathe, Nerd";
+    } else if (phase === "pauseAfterInhale" || phase === "pauseAfterExhale") {
+      return "pause";
+    } else {
+      return phase;
+    }
+  }
+
+  function getCountDisplayText() {
+    if (!breathe) {
+      return "";
+    } else if (phase === "pauseAfterInhale" || phase === "pauseAfterExhale") {
+      return "";
+    } else {
+      return count;
+    }
+  }
+
+  useEffect(() => {
+    if (!breathe) {
+      return;
+    }
+
+    const timer = setInterval(() => {
+      setTimeRemaining((currentTime) => {
+        if (currentTime <= 1) {
+          clearInterval(timer);
+          setBreathe(false);
+          return 140;
+        }
+        console.log("currentTime", currentTime);
+        return currentTime - 1;
+      });
+      if (count > 1) {
+        setCount((currentCount) => currentCount - 1);
+      } else if (phase === "inhale") {
+        goToPauseAfterInhale();
+      } else if (phase === "pauseAfterInhale") {
+        goToExhale();
+      } else if (phase === "exhale") {
+        goToPauseAfterExhale();
+      } else if (phase === "pauseAfterExhale") {
+        goToInhale();
+      }
+    }, 1000);
+
+    return () => {
+      clearInterval(timer);
+    };
+  }, [breathe, count, phase]);
+
   return (
     <main className="breathing-page">
       <section className="breathing-content">
-        <h1>{breathe ? "INHALE" : "Breathe, Nerd"}</h1>
+        <h1>{getPhaseDisplayText()}</h1>
 
         <div className="breathing-circle">
-          <span className="breathing-count">{breathe ? "4" : " "}</span>
+          <span className="breathing-count">{getCountDisplayText()}</span>
         </div>
 
-        {!breathe && (
-          <button onClick={() => setBreathe(true)}>npm install calm</button>
-        )}
+        {!breathe && <button onClick={handleStart}>npm install calm</button>}
       </section>
     </main>
   );
