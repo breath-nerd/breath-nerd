@@ -65,7 +65,7 @@ function App() {
 
   // prevent app render until auth check completes
   if (loading) {
-    return <p>Loading classes...</p>;
+    return <p>npm installing calm...</p>;
     //make separate loading page component and pass function into here and style it with css
   }
 
