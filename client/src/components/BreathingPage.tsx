@@ -95,6 +95,31 @@ type BreathingPageProps = {
 function BreathingPage({ user, onLogout, isBlurred }) {
   const [breathe, setBreathe] = useState(false);
   const [phase, setPhase] = useState("notStarted");
+  const [count, setCount] = useState(0);
+
+  function goToInhale() {
+    setPhase("inhale");
+    setCount(4);
+  }
+
+  function goToPauseAfterInhale() {
+    setPhase("pauseAfterInhale");
+    setCount(2);
+  }
+
+  function gotToExhale() {
+    setPhase("exhale");
+    setCount(6);
+
+    function toToPauseAfterExhale() {
+      setPhase("pauseAfterExhale");
+      setCount(2);
+    }
+  }
+
+  function handleStart() {
+    goToInhale();
+  }
 
   return (
     <main className="breathing-page">
