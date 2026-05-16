@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import type { User } from "./types";
-// import LoginModal from "./components/LoginModal";
+import LoginModal from "./components/LoginModal";
 import BreathingPage from "./components/BreathingPage";
 
 /*
@@ -68,7 +68,7 @@ function App() {
   return (
     <>
       <BreathingPage user={user} onLogout={handleLogout} isBlurred={!user} />
-      {/* {!user && <LoginModal onLoginSuccess={(user: User) => setUser(user)} />} */}
+      {!user && <LoginModal onLoginSuccess={(user: User) => setUser(user)} />}
     </>
   );
 }
