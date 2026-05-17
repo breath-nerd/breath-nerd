@@ -4,10 +4,6 @@ import LoginModal from "./components/LoginModal";
 import BreathingPage from "./components/BreathingPage";
 
 /*
-  App.tsx
-
-  Root app component
-  
   Responsibilities:
   - Verify auth session on app load
   - Store authenticated user state
@@ -20,16 +16,15 @@ import BreathingPage from "./components/BreathingPage";
 */
 
 function App() {
-  // global auth state
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // Verify existing auth session on initial app load
   useEffect(() => {
     async function authCheck() {
       try {
         const res = await fetch("/auth/verify", {
           method: "GET",
+          // credentials required so session cookie is sent with the request
           credentials: "include",
         });
         if (res.ok) {
@@ -45,7 +40,6 @@ function App() {
     authCheck();
   }, []);
 
-  // clear authenticated user on logout
   async function handleLogout() {
     try {
       const res = await fetch("/auth/logout", {
@@ -56,7 +50,7 @@ function App() {
       if (!res.ok) {
         throw new Error("Logout failed");
       }
-
+      // clear user state client-side after server session is destroyed
       setUser(null);
     } catch (error) {
       console.error(error);
@@ -65,17 +59,18 @@ function App() {
 
   // prevent app render until auth check completes
   if (loading) {
-    return <p>Loading classes...</p>;
+    return <p>npm installing calm...</p>;
     //make separate loading page component and pass function into here and style it with css
   }
 
-  //unauthenticated users are directed to LoginModal
-  if (!user) {
-    return <LoginModal onLoginSuccess={(user: User) => setUser(user)} />;
-  }
-
-  //authenticated users are directed to BreathingPage
-  return <BreathingPage user={user} onLogout={handleLogout} />;
+  //BreathingPAge is always visible
+  //LoginModal appears on top when user is logged out
+  return (
+    <>
+      <BreathingPage user={user} onLogout={handleLogout} isBlurred={!user} />
+      {!user && <LoginModal onLoginSuccess={(user: User) => setUser(user)} />}
+    </>
+  );
 }
 
 export default App;

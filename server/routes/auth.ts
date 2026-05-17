@@ -1,11 +1,12 @@
 import express from "express";
 import type { Request, Response, NextFunction } from "express";
 import bcrypt from "bcrypt";
-import { isAuthenticated } from "../middleware/isAuthenticated";
-import { supabase } from "../db/supabaseClient";
+import { isAuthenticated } from "../middleware/isAuthenticated.js";
+import { supabase } from "../db/supabaseClient.js";
 
 const router = express.Router();
 
+// userId comes from session, not request body — prevents user from spoofing their own id
 router.get("/verify", isAuthenticated, async (req: Request, res: Response, next: NextFunction) => {
   try {
     const userId = req.session.userId;
@@ -18,20 +19,23 @@ router.get("/verify", isAuthenticated, async (req: Request, res: Response, next:
 
     if (error || !user) {
       return res.status(401).json({
-        message: "Not authenticated",
+        error: "Not authenticated",
       });
     }
 
     return res.status(200).json({
-      id: user.id,
-      email: user.email,
-      name: user.name,
+      user: {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+      },
     });
   } catch (err) {
-    next(err);
+    return next(err);
   }
 });
 
+// destroy session server-side before clearing cookie so the session can't be reused
 router.post("/logout", (req: Request, res: Response, next: NextFunction) => {
   try {
     req.session.destroy((err) => {
@@ -39,13 +43,17 @@ router.post("/logout", (req: Request, res: Response, next: NextFunction) => {
         return next(err);
       }
 
+
+      // clear cookie so browser doesn't send a dead session on next request
+
       res.clearCookie("connect.sid");
 
       return res.status(200).json({
-        message: "Logged out successfully",
+        message: "Logged out",
       });
     });
   } catch (err) {
+
     next(err);
   }
 });
@@ -146,7 +154,7 @@ router.post("/login", async (req: Request, res: Response, next: NextFunction) =>
       },
     });
   } catch (err) {
-    next(err);
+    return next(err);
   }
 });
 
