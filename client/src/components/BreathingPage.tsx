@@ -14,82 +14,87 @@ type BreathingPageProps = {
   Build the logged-in breathing experience:
   landing view → guided breathing session → completion view.
 
-  Props:
-  [ ] Accept props from App.tsx:
+  Done:
+  [x] Accept props from App.tsx:
       - user: User | null
       - onLogout: () => Promise<void>
       - isBlurred?: boolean
 
-  Initial UI:
-  [ ] Show a simple landing screen when no session is active:
-      - greeting / welcome text
+  [x] Build initial landing view:
+      - title
       - static breathing circle
-      - Start button
-      - Logout button
+      - start button
 
-  Component State:
-  [ ] Add state for breathing flow:
-      - isBreathing
-      - phase: "idle" | "inhale" | "hold" | "exhale" | "complete"
+  [x] Add breathing state:
+      - breathe
+      - phase
       - count
-      - sessionComplete
-      - elapsedTime or timeRemaining
+      - timeRemaining
 
-  Start Behavior:
-  [ ] When Start is clicked:
-      - start the session
-      - set phase to "inhale"
-      - set count to 4
-      - reset completion state
-      - start total session timer
+  [x] Add start behavior:
+      - Start button begins session
+      - session starts with inhale
+      - count starts at 4
 
-  Breathing Logic:
-  [ ] Use useEffect + interval to count down every second.
-  [ ] Inhale countdown:
-      - Inhale: 4, 3, 2, 1
-  [ ] Exhale countdown:
-      - Exhale: 6, 5, 4, 3, 2, 1
-  [ ] Loop inhale/exhale until the full session time is reached.
+  [x] Add breathing loop:
+      - inhale: 4, 3, 2, 1
+      - pause after inhale
+      - exhale: 6, 5, 4, 3, 2, 1
+      - pause after exhale
+      - repeat cycle
 
-  MVP Timing:
-  [ ] Start simple:
-      - inhale 4 seconds
-      - exhale 6 seconds
-      - repeat for 120 seconds
+  [x] Display both pause phases as "pause"
 
-  After MVP Works:
-  [ ] Add hold pauses:
-      - hold after inhale
-      - hold after exhale
-  [ ] Add smoother circle animation.
-  [ ] Add better visual styling.
+  [x] Hide countdown number during pause phases
 
-  Completion Screen:
-  [ ] When total session time reaches 120 seconds:
-      - stop breathing timer
-      - mark session as complete
-      - show completion message
-  [ ] Show completion buttons:
-      - Start Again
-      - Finish / Logout
+  [x] Stop session timer after 140 seconds
 
-  Actions:
-  [ ] Start Again resets the breathing session.
-  [ ] Finish / Logout calls onLogout().
+  Tomorrow:
+  [ ] Replace temporary end behavior:
+      - instead of returning to landing screen when timeRemaining reaches 0
+      - set phase/session state to complete
 
-  Page Blur:
-  [ ] If isBlurred is true, apply a blurred class to the page.
-  [ ] Style the blurred state in CSS.
+  [ ] Build completion screen:
+      - show completed message
+      - show Start Again button
+      - show Finish / Logout button
 
-  Integration:
-  [ ] Make sure App.tsx passes:
+  [ ] Add Start Again behavior:
+      - reset timeRemaining to 140
+      - reset count
+      - restart at inhale
+
+  [ ] Add Finish / Logout behavior:
+      - call onLogout()
+
+  [ ] Clean up display helpers:
+      - keep internal phase values specific
+      - keep user-facing text simple
+
+  [ ] Review unused props/state:
       - user
-      - onLogout
-      - isBlurred if needed
-  [ ] Test frontend ↔ backend auth flow.
+      - isBlurred
+      - any temporary console logs
 
+  [ ] Test full flow:
+      - landing screen
+      - start session
+      - breathing loop
+      - automatic completion after 140 seconds
+      - start again
+      - logout
+
+  /*
   Stretch:
-  [ ] Save completed breathing session to Supabase.
+  [ ] Animate the breathing circle:
+      - grow during inhale
+      - hold during pause
+      - shrink during exhale
+      - hold during pause
+
+  [ ] Personalize the welcome screen:
+      - display the user's name after login
+      - fallback gracefully if name is missing
 */
 
 function BreathingPage({ user, onLogout, isBlurred }) {
